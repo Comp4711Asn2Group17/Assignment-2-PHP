@@ -21,8 +21,7 @@ if(isset($_GET['logout'])) {
 
 if(isset($_POST['username'])) {
     if($userinfo[$_POST['username']] == $_POST['password']) {
-        $this->session->set_userdata('username', $_POST['username']);
-        redirect('homepage');
+        $_SESSION['username'] = $_POST['username'];
     }else {
         //Invalid Login
     }
@@ -74,7 +73,7 @@ if(isset($_POST['username'])) {
                                                      <a href="/login">Login</a>
                                                 <li>
                                                      <?php if(isset($_POST['username']) && $_SESSION['username']): ?>
-                                                          <a href="homepage/?logout=1">Logout</a>
+                                                          <a href="?logout=1">Logout</a>
                                                      <?php endif; ?>
                                                  </li>
                                                 </li>

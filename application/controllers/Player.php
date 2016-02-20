@@ -5,17 +5,19 @@ class Player extends Application {
 
 	public function index()
 	{  
-            $player =  $this->session->userdata['username'];
+            
+            
+	    //$this->portfolio($player);
             
             $this->data['pagebody'] = 'player/portfolio';
-            $record = $this->players->get($player);
+            $record = $this->players->get("Donald");
             
             $this->data = array_merge($this->data, $record);
             $this->data['name'] = $record['Player'];
             $this->data['cash'] = $record['Cash'];
             $this->data['image'] = './data/'.$record['Player'].'.png';
             
-            $transactions_parms['transactions'] = self::transaction_get_all_by_player($player);
+            $transactions_parms['transactions'] = self::transaction_get_all_by_player("Donald");
             
             $this->data['transactions'] = $this->parser->parse('transactions',$transactions_parms, true);
 
