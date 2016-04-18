@@ -11,7 +11,6 @@ class Movement extends CI_Model {
     function __construct()
     {
 	parent::__construct();
-
     }
     //grabs the data from the server and populate the database
     function init($values)

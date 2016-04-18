@@ -2,7 +2,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 /**
- * Contacts table.
+ * Stocks table.
  */
 class Stocks extends CI_Model {
     // Constructor

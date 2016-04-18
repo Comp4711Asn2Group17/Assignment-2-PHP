@@ -1,21 +1,16 @@
 <?php
-
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-
 /**
  * Contacts table.
  */
 class Transactions extends CI_Model 
 {
-
     // Constructor
     function __construct() 
     {
         parent::__construct();
-
     }
-
     //grab the data from server and populate the database
     function init($values)
     {
@@ -35,37 +30,28 @@ class Transactions extends CI_Model
         $query = $this->db->get('transactions');
         return $query->result_array();
     }
-
     //get all transaction belonging to one player
     public function get_all_by_player($which) 
     {
-
         $sql = "SELECT * FROM transactions WHERE Player = ?";
-
         $query = $this->db->query($sql, array($which));
         if ($query->num_rows() > 0)
             return $query->result_array();
-
         return null;
     }
-
     //get the value of a specific stock
     public function get_stock_value($stock) 
     {
         $stock_value = null;
-
         $sql = "SELECT  s.Value "
                 . "FROM stocks s "
                 . "WHERE s.Code = '"
                 . $stock
                 . "'";
-
         $query = $this->db->query($sql)->result_array();
-
         if (!empty($query)) {
             $stock_value = $query[0]['Value'];
         }
-
         return $stock_value;
     }
     
@@ -73,15 +59,12 @@ class Transactions extends CI_Model
     public function get_stock($stock)
     {
         $stock_value = null;
-
         $sql = "SELECT  * "
                 . "FROM transactions t "
                 . "WHERE t.Stock = '"
                 . $stock
                 . "'";
-
         $query = $this->db->query($sql)->result_array();
         return $query;
     }
-
 }

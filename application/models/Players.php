@@ -15,7 +15,6 @@ class Players extends CI_Model {
     // return all players
     function all()
     {
-
         $this->db->order_by("Player", "asc");
         $query = $this->db->get('players');
         return $query->result_array();
@@ -61,12 +60,10 @@ class Players extends CI_Model {
     //return a specific player based on name
     public function get($which)
     {
-
         $sql = 'SELECT * FROM players WHERE Player = "'.$which.'";'; 
            
         $query = $this->db->query($sql, array($which));
         $row = $query->row_array();
-
         return $row;
         //return null;
     }
@@ -82,7 +79,6 @@ class Players extends CI_Model {
                         ."'";
         
         $query_rows = $this->db->query($sql)->result_array();
-
         foreach($query_rows as $row)
         {
             $stock_value = ($this->transactions->get_stock_value($row['Stock']))
@@ -102,4 +98,3 @@ class Players extends CI_Model {
         return $equity;
     }
 }
-
