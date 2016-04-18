@@ -1,13 +1,17 @@
 <h4>Transactions</h4>
 <table class="table table-striped table-hover">
+    <th>Seq</th>
     <th>Date</th>
+    <th>Agent</th>
     <th>Name</th>
     <th>Stock</th>
     <th>Trans</th>
     <th>Quantity</th>
 {transactions}
 <tr>
-    <td>{DateTime}</td>
+    <td>{Seq}
+    <td>{Datetime}</td>
+    <td>{Agent}</td>
     <td>{Player}</td>
     <td>{Stock}</td>
     <td>{Trans}</td>
