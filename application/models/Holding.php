@@ -21,13 +21,14 @@ class Holding extends CI_Model{
     //adding an entry to the holding table
     function buy($player,$stock,$cert)
     {
-        
+        $query = $this->db->query('insert into holding values("'.$player.'", '
+                . '"'.$stock.'", 10, "'.$cert.'")');
     }
     
     //removing an entry from the holding table
-    function sell($player,$stock,$cert)
+    function sell($cert)
     {
-        
+        $query = $this->db->query('delete from holding where certificate = "'.$cert.'"');
     }
     
     //minus 10 quantity from specific record in holding table

@@ -14,15 +14,12 @@
 class Play extends Application {
 
     //put your code here
-
     //playing page
     public function index() {
         $status = simplexml_load_file('http://bsx.jlparry.com/status');
         //if game not in session goto error page
         if ($status->state != 2 && $status->state != 3) {
-            if ($this->session->has_userdata('token')) {
-                $this->session->unset_userdata('token');
-            }
+            $this->session->unset_userdata('token');
             $this->data['pagebody'] = 'errors/gamestate';
             $this->render();
         } else {
@@ -36,6 +33,23 @@ class Play extends Application {
                     $this->data['equity'] = $this->players->get_equity($record[0]['Player']);
                     $this->data['image'] = '/data/' . $record[0]['Player'] . '.jpg';
                     $this->data['select_players'] = self::populate_options();
+
+                    $holdings = $this->holding->all();
+
+                    if (sizeof($holdings) > 0) {
+                        foreach ($holdings as $holding) {
+                            $holdingarr[] = $this->parser->parse('holding_table', (array) $holding, true);
+                        }
+                        $parms = array(
+                            'table_open' => '<table class="table">'
+                        );
+                        $this->table->set_template($parms);
+                        $this->table->set_heading('Player', 'Stock', 'Quantity', 'Sell');
+                        //generate column and html content
+                        $rows = $this->table->make_columns($holdingarr, 1);
+                        $this->data['holding'] = $this->table->generate($rows);
+                    } else
+                        $this->data['holding'] = 'No records exist';
 
                     $stocks = $this->stocks->all();
 
@@ -53,14 +67,21 @@ class Play extends Application {
                     $rows = $this->table->make_columns($stockarr, 1);
                     $this->data['stocks'] = $this->table->generate($rows);
                     $this->data['pagebody'] = 'play';
-            $this->render();
+                    //display login session
+                    if ($this->session->has_userdata('username')) {
+                        $this->data['logindata'] = '<a href="/login/logout">Logout</a>';
+                        $this->data['username'] = $this->session->userdata('username');
+                    } else {
+                        $this->data['logindata'] = '<a href="/login">Login</a>';
+                    }
+                    $this->render();
                 } else
                     redirect('/errors/records');
                 //if user not logged in, direct to login
             } else if (!$this->session->has_userdata('username')) {
                 redirect('/login');
                 //if agent not set, register
-            } else if(!$this->session->has_userdata('token')) {
+            } else if (!$this->session->has_userdata('token')) {
                 $url = 'http://bsx.jlparry.com/register';
                 $data = array('team' => 'G17', 'name' => "bobsmith ", 'password' => 'tuesday');
                 $options = array(
@@ -72,8 +93,12 @@ class Play extends Application {
                 );
                 $context = stream_context_create($options);
                 $result = file_get_contents($url, false, $context);
+                var_dump($result);
                 $this->session->set_userdata('token', $result);
-                redirect('/login');
+                if (!$this->session->has_userdata('username')) {
+                    redirect('/login');
+                } else
+                    redirect('/play');
             }
         }
     }
@@ -89,31 +114,30 @@ class Play extends Application {
         $select = form_dropdown('select_players', $options, $this->data['name'], $extra);
         return $select;
     }
-    
+
     public function buy($code) {
         var_dump($this->session->userdata('token'));
-        if($this->players->get($this->session->userdata('username'))['Cash'] >= 
-                $this->stocks->selected($code)[0]['Value'] * 10)
-        {
+        if ($this->players->get($this->session->userdata('username'))['Cash'] >=
+                $this->stocks->selected($code)[0]['Value'] * 10) {
             $url = 'http://bsx.jlparry.com/buy';
-                $data = array('team' => 'G17', 'token' => $this->session->userdata('token'), 
-                    'player' => $this->session->userdata('username'),
-                    'stock' => $code, 'quantity' => 10);
-                $options = array(
-                    'http' => array(
-                        'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-                        'method' => 'POST',
-                        'content' => http_build_query($data)
-                    )
-                );
-                $context = stream_context_create($options);
-                $result = file_get_contents($url, false, $context);
-                var_dump($result);
-        } else echo "not enough cash";
+            $data = array('team' => 'G17', 'token' => $this->session->userdata('token'),
+                'player' => $this->session->userdata('username'),
+                'stock' => $code, 'quantity' => 10);
+            $options = array(
+                'http' => array(
+                    'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                    'method' => 'POST',
+                    'content' => http_build_query($data)
+                )
+            );
+            $context = stream_context_create($options);
+            $result = file_get_contents($url, false, $context);
+            var_dump($result);
+        } else
+            echo "not enough cash";
     }
-    
-    public function sell($code)
-    {
+
+    public function sell($code) {
         
     }
 
