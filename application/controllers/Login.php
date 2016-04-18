@@ -8,19 +8,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Login extends Application{
     
-    public function __construct() {
-           
-        parent::__construct();
-        
-          
-    }
-    
     function index() 
     {
-        
         $this->data['pagebody'] = 'Login/login';
-        $this->render();  
-                    
+        $this->render();              
+    }
+    
+    function logout()
+    {
+        //unset user session
+        $this->session->unset_userdata('username');
+        redirect('./');
     }
      
 }?>

@@ -7,19 +7,23 @@
     
 </script>
 <!--The drop down menu-->
-<h1>This is the Stock page</h1>
 
 {pageselect}
 
-
+<h2>Stock Info</h2>
 {stocktable}
 
+<h2>Movements</h2>
 <br />
 <br />
 
 {movementtable}
-        
-       
+ 
+<h2>Transactions</h2>
+<br />
+<br />
+
+{transtable}
 
 
 <!--The stock movements table-->

@@ -1,35 +1,3 @@
-<?php
-
- if(!isset($_SESSION)) 
-    { 
-        session_start(); 
-        
-    } 
-
-$userinfo = array(
-                'Henry'=>'1234',
-                'Donald'=>'1234',
-                'Mickey'=>'1234',
-                'George'=>'1234'
-                );
-
-if(isset($_GET['logout'])) {
-    
-    $_SESSION['username'] = '';
-    header('Location:  ' . $_SERVER['PHP_SELF']);
-}
-
-if(isset($_POST['username'])) {
-    if($userinfo[$_POST['username']] == $_POST['password']) {
-        $this->session->set_userdata('username', $_POST['username']);
-        redirect('homepage');
-    }else {
-        //Invalid Login
-    }
-}
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -70,14 +38,12 @@ if(isset($_POST['username'])) {
 							<a href="/stock">Stock</a>
 						</li>
                                                 <li>
-                                                    
-                                                     <a href="/login">Login</a>
-                                                <li>
-                                                     <?php if(isset($_POST['username']) && $_SESSION['username']): ?>
-                                                          <a href="homepage/?logout=1">Logout</a>
-                                                     <?php endif; ?>
-                                                 </li>
+                                                    <a href="/play">Play</a>
                                                 </li>
+                                                <li>
+                                                     {logindata}
+                                                </li>
+                                                <li><a>{username}</a></li>
 					</ul>
 					
 				</div>
